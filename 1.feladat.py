@@ -4,5 +4,4 @@ def fibo():
         a=ls[-1]+ls[-2]
         ls.append(a)
     return ls
-
 print(fibo())
