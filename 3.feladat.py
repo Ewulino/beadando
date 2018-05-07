@@ -1,4 +1,4 @@
-def csatolas(fej,elem):
+def csatolas(fej,elem):  
     result=[]
     if len(elem)==0:
         return fej
@@ -46,6 +46,7 @@ def nothing(values,nothing):
         index_j += 1
     return result
 # print(nothing([1,2,3,4,5,6,7,8,9],[1,0,0,0,0,0,0,0,0]))
+# print(nothing([1,2,3,4,5,6,7,8,9],[0,1,1,0,0,0,0,1,0]))
 
 def get_numbers(stop=9):
     values = range(1, stop + 1)
