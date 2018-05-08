@@ -1,5 +1,5 @@
-# 
-# def csatolas(fej,elem):
+
+def csatolas(fej,elem):
     result=[]
     if len(elem)==0:
         return fej
@@ -20,9 +20,7 @@ def randomvalues(values):
 
 def get_ones_zeros(size):
      if size==0:
-
-            return [[]]
-    else:
+        return [[]]    else:
         res = get_ones_zeros(size - 1)
         return csatolas(0, res) + csatolas(1, res)
 # print(get_ones_zeros(1))
@@ -31,7 +29,7 @@ def get_ones_zeros(size):
 def nothing(values,nothing):
     index_i = 0
     index_j = 0
-#     size = len(values)
+    size = len(values)
     result = []
     value_stack = values[0]
     while index_i < size:
@@ -81,4 +79,3 @@ solution()
 # [123, -4, -5, -6, -7, 8, -9]
 # [12, 3, 4, 5, -6, -7, 89]
 # [12, -3, -4, 5, -6, 7, 89]
-,,,,
