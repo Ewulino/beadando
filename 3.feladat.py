@@ -1,81 +1,74 @@
+ 1-9 ig +,- vagy semmit a számjegyek közé téve az összeg 100
 
-def csatolas(fej,elem):
+def csatolas(fej,elem):   # fej beszurása minden elem elé
     result=[]
     if len(elem)==0:
         return fej
     for t in elem:
-        result.append([fej]+t)
+        result.append([fej]+t)  #  ha t benne van elemben akkor fejet hozzáfűzi t-hez(+)
     return result
-# print(csatolas(1,[[2,3],[4,5]]))
+# print(csatolas(1,[[2,3],[4,5]])) pl: [[1,2,3],[1,4,5]]
 # print(csatolas(1,[]))
 
-def randomvalues(values):
-    if len(values)==0:
+def randomvalues(ertek):  # random értékek +,- előjellel
+    if len(ertek)==0:
         return [[]]
     else:
-        res = randomvalues(values[1:])
-        return csatolas(values[0], res) + csatolas(-values[0], res)
-# print(randomvalues(range(1,4)))
-# print(randomvalues([1]))
+        resz = randomvalues(ertek[1:])
+        #  ertek[0] egyenlő a fejjel és ehhez csatolja hozzá az ertek 1.indexétől a többit(resz), majd ugyanezt megismétli - előjellel és visszaadja az összes lehetséges esetet
+        return csatolas(ertek[0], resz) + csatolas(-ertek[0], resz)
+# print(randomvalues(range(1,4))) pl:[[1, 2, 3], [1, 2, -3], [1, -2, 3], [1, -2, -3], [-1, 2, 3], [-1, 2, -3], [-1, -2, 3], [-1, -2, -3]]
+# print(randomvalues([1])) pl:[[1],[-1]]
 
-def get_ones_zeros(size):
-     if size==0:
-        return [[]]    else:
-        res = get_ones_zeros(size - 1)
-        return csatolas(0, res) + csatolas(1, res)
-# print(get_ones_zeros(1))
-# print(get_ones_zeros(3))
+def get_ones_zeros(size): # 0,1-ből álló értékeket állít elő
+    if size==0:
+        return [[]]
+    else:
+        resz = get_ones_zeros(size - 1) # csökkentjük size -1-el mert 0.elem adott
+        # 0-hoz hozzá csatolja a maradek helyet és kitölti majd ezt megteszi 1-el is és visszaadja az összes lehetséges esetet
+        return csatolas(0, resz) + csatolas(1, resz)
+# print(get_ones_zeros(1)) pl: [[0],[1]]
+# print(get_ones_zeros(3)) pl: [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 1], [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]]
 
-def nothing(values,nothing):
-    index_i = 0
-    index_j = 0
-    size = len(values)
+def nothing(ertek,one_zero):  # összevonja a számokat és 2vagy többszámjegyűt hoz létre 1-9iig
+    idx_i = 0 # ertek indexei
+    idx_j = 0  # one_zero indexei
+    size = len(ertek)
     result = []
-    value_stack = values[0]
-    while index_i < size:
-        if index_i + 1 >= size:
-            result.append(value_stack)
+    kezdoertek = ertek[0]
+    while idx_i < size:   # ameddig ertek indexe kisebb mint az ertek hossza
+        if idx_i + 1 >= size:
+            result.append(kezdoertek)
             break
-        new_value = values[index_i + 1]
-        if nothing[index_j] == 0:
-            result.append(value_stack)
-            value_stack = new_value
+        new_value = ertek[idx_i + 1]
+        if one_zero[idx_j] == 0:   #  one_zero indexén lévő szám egyenlő nullával
+            result.append(kezdoertek)
+            kezdoertek= new_value
         else:
-            value_stack = value_stack * 10 + new_value
-        index_i += 1
-        index_j += 1
+            kezdoertek= kezdoertek * 10 + new_value  # ertek[0]*10 és hozzáadja az ertek[1] elemét azaz a következőt
+        idx_i += 1
+        idx_j += 1
     return result
-# print(nothing([1,2,3,4,5,6,7,8,9],[1,0,0,0,0,0,0,0,0]))
-# print(nothing([1,2,3,4,5,6,7,8,9],[0,1,0,0,1,1,0,0,0]))
-def get_numbers(,stop=9):
-    values = range(1, stop + 1)
-    one_zeros = get_ones_zeros(stop)
+# print(nothing([1,2,3,4,5,6,7,8,9],[1,0,0,0,0,0,0,0,0])) pl: [12, 3, 4, 5, 6, 7, 8, 9]
+# print(nothing([1,2,3,4,5,6,7,8,9],[0,1,1,0,0,1,0,1,0]))  pl:[1, 234, 5, 67, 89]
+
+def get_numbers(stop=9):   # számok halmazát hozza létre
+    ertek= range(1, stop + 1)   # 1-9 ig a számok
+    one_zeros = get_ones_zeros(stop)  # 0,1-ből álló érétkekek hoz létre 9-es lista mérettel
     result = []
     for one_zero in one_zeros:
-        res = nothing(values, one_zero)
-        result.append(tuple(res))
-    return set(result)
-# print(get_numbers(3))
+        szamhz = nothing(ertek, one_zero)  # szamhz-ban lesz 2jegyű szám is
+        result.append(tuple(szamhz))  # eredmeny tuple() alakitása , mert lista nem lehet eleme a halmaznak
+    return set(result)  # hz kell, ellenben 2x irja ki a legvégén az eredményt
+# print(get_numbers(3)) pl:{(12, 3), (123,), (1, 23), (1, 2, 3)}
 # print(get_numbers(9))
 
-def solution(stop=9,goal=100):
+def vegso(stop=9,osszeg=100):  # 1-9 lévő számok összes lehetséges kombinációjábol visszaadja  amikor az összeg 100
     numbers = get_numbers(stop)
     for number in numbers:
-        variations = map(lambda y: [number[0]] + y, randomvalues(number[1:]))
-        for v in variations:
-            SumValue= sum(v)
-            if goal == SumValue:
-                print(v)
-solution()
-
-# # [1, 2, 34, -5, 67, -8, 9]
-# [1, 23, -4, 56, 7, 8, 9]
-# [12, 3, -4, 5, 67, 8, 9]
-# [123, 4, -5, 67, -89]
-# [123, 45, -67, 8, -9]
-# [1, 23, -4, 5, 6, 78, -9]
-# [123, -45, -67, 89]
-# [1, 2, 3, -4, 5, 6, 78, 9]
-# [123, -4, -5, -6, -7, 8, -9]
-# [12, 3, 4, 5, -6, -7, 89]
-# [12, -3, -4, 5, -6, 7, 89]
+        variacio = map(lambda y: [number[0]] + y, randomvalues(number[1:]))   # y = számhz 0.eleme (,) +,- értékek generálása és számhz1.elemétől
+        for v in variacio:
+            SumValue= sum(v)    # ha benne van , összegezzük és ha 100 akkor kiiratjuk
+            if osszeg == SumValue:
+                print(v,'=',osszeg)
+vegso()
