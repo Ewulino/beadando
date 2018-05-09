@@ -1,4 +1,4 @@
- 1-9 ig +,- vagy semmit a számjegyek közé téve az összeg 100
+#  1-9 ig +,- vagy semmit a számjegyek közé téve az összeg 100
 
 def csatolas(fej,elem):   # fej beszurása minden elem elé
     result=[]
